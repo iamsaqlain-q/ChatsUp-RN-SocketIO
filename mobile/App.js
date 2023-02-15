@@ -7,8 +7,10 @@ import {
   TouchableOpacity,
   StyleSheet,
   FlatList,
+  Image,
 } from 'react-native';
 import {io} from 'socket.io-client';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 class App extends Component {
   constructor(props) {
@@ -32,7 +34,19 @@ class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View>
+        <View style={styles.topbarView}>
+          <View style={styles.halfView}>
+            <Ionicons name="arrow-back-outline" size={25} color="#fff" />
+            <Image source={require('./src/assets/dp.png')} style={styles.img} />
+            <Text style={styles.username}>User Name</Text>
+          </View>
+          <View style={styles.halfView}>
+            <Ionicons name="videocam-outline" size={25} color="#fff" />
+            <Ionicons name="call-outline" size={25} color="#fff" />
+            <Ionicons name="ellipsis-vertical-outline" size={25} color="#fff" />
+          </View>
+        </View>
+        <View style={styles.flatlistView}>
           <FlatList
             data={this.state.chatData}
             key={item => item}
@@ -56,7 +70,11 @@ class App extends Component {
             }}
             style={styles.input}
           />
-          <TouchableOpacity style={styles.sendBtn}>
+          <TouchableOpacity
+            style={styles.sendBtn}
+            onPress={() => {
+              this.submitChatMessage();
+            }}>
             <Text style={styles.sendTxt}>Send</Text>
           </TouchableOpacity>
         </View>
@@ -71,17 +89,45 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#E7DED7',
-    padding: 10,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
+  topbarView: {
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#03867E',
+    width: Dimensions.get('window').width,
+    padding: 10,
+  },
+  halfView: {
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: Dimensions.get('window').width / 3,
+  },
+  img: {
+    width: 30,
+    height: 30,
+    borderRadius: 20,
+    marginLeft: 5,
+  },
+  username: {
+    marginLeft: 10,
+    color: '#fff',
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
   typeView: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignSelf: 'flex-end',
+    marginLeft: 5,
+    padding: 10,
+    justifyContent: 'flex-end',
+    alignSelf: 'center',
     flexDirection: 'row',
   },
   input: {
@@ -103,6 +149,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     color: '#fff',
+  },
+  flatlistView: {
+    flex: 17,
+    padding: 15,
   },
   itemView: {
     flex: 1,
