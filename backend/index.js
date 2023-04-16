@@ -3,7 +3,6 @@ const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const port = 3000;
-//server.listen(port);
 
 io.on("connection", (socket) => {
   console.log("A user connected!");

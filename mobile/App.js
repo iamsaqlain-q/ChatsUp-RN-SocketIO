@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {
   View,
@@ -11,6 +12,7 @@ import {
 } from 'react-native';
 import {io} from 'socket.io-client';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import VideoCall from './src/assets/components/VideoCall';
 
 class App extends Component {
   constructor(props) {
@@ -18,8 +20,10 @@ class App extends Component {
     this.state = {
       chatMessage: '',
       chatData: [],
+      videoCall: false,
     };
   }
+
   componentDidMount() {
     this.socket = io('http://192.168.127.189:3000');
     this.socket.on('chat message', msg => {
@@ -34,6 +38,17 @@ class App extends Component {
   render() {
     return (
       <View style={styles.container}>
+        {this.state.videoCall && (
+          <View
+            style={{
+              flex: 1,
+              position: 'absolute',
+              width: Dimensions.get('window').width,
+              height: Dimensions.get('window').height,
+            }}>
+            <VideoCall />
+          </View>
+        )}
         <View style={styles.topbarView}>
           <View style={styles.halfView}>
             <Ionicons name="arrow-back-outline" size={25} color="#fff" />
@@ -41,7 +56,10 @@ class App extends Component {
             <Text style={styles.username}>User Name</Text>
           </View>
           <View style={styles.halfView}>
-            <Ionicons name="videocam-outline" size={25} color="#fff" />
+            <TouchableOpacity onPress={() => this.setState({videoCall: true})}>
+              <Ionicons name="videocam-outline" size={25} color="#fff" />
+            </TouchableOpacity>
+
             <Ionicons name="call-outline" size={25} color="#fff" />
             <Ionicons name="ellipsis-vertical-outline" size={25} color="#fff" />
           </View>
